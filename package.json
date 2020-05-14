@@ -1,6 +1,6 @@
 {
   "name": "bridge-js-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "JS Bridge SDK for contacting between iOS(using WebViewJavascriptBridge) and Android(using JsBridge) Webviews.",
   "main": "dist/cjs/bridge-js-sdk.js",
   "module": "dist/esm/bridge-js-sdk.js",
