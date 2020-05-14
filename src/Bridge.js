@@ -30,6 +30,8 @@ export default class Bridge {
 
         this.browserBridge = options.browserBridge || browserBridge;
 
+        this.timeout = options.timeout || 200;
+
         this.status = 'inited';
     }
 
@@ -166,16 +168,12 @@ export default class Bridge {
 
     invoke(actionName, params = {}, mockData) {
 
-        return new Promise((resolve, reject) => {
+        const apiPromise = new Promise((resolve, reject) => {
 
             const bridge = this._getBridge();
 
             if (!bridge) {
-                log('warn', 'Bridge not ready yet.');
-                this.ready(bridge => {
-                    this.invoke(actionName, params, mockData);
-                });
-                return;
+                return reject(new Error('Bridge not inited.'));
             }
 
             const callback = rawResponse => {
@@ -196,6 +194,16 @@ export default class Bridge {
 
         });
 
+        const timeoutPromise = new Promise((resolve, reject) => {
+            const error = new Error(`Requesting bridge method ${actionName} timeout.`);
+            error.isTimeout = true;
+
+            setTimeout(function () {
+                reject(error);
+            }, this.timeout);
+        });
+
+        return Promise.race([apiPromise, timeoutPromise]);
     }
 
     on(eventName, callback) {
@@ -203,10 +211,7 @@ export default class Bridge {
         const bridge = this._getBridge();
 
         if (!bridge) {
-            log('warn', 'Bridge not ready yet.');
-            this.ready(bridge => {
-                this.on(eventName, callback);
-            });
+            log('error', 'Bridge not inited.');
             return;
         }
 

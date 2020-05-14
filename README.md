@@ -20,6 +20,11 @@ https://github.com/Lision/WKWebViewJavascriptBridge
 https://github.com/lzyzsd/JsBridge
 
 
+## Installation
+
+`npm i -S bridge-js-sdk`
+
+
 ## Usage
 
 ### init
@@ -65,9 +70,9 @@ BridgeService.init({
 
 ```js
 
-const bridge = BridgeService.getInstance();
-
-bridge.ready(function () {});
+BridgeService.init(options).then(function (bridge) {
+    // bridge is ready
+});
 
 ```
 
@@ -78,8 +83,11 @@ bridge.ready(function () {});
 
 const bridge = BridgeService.getInstance();
 
-bridge.invoke('notify', {
-    type: 1
+bridge.invoke('requestNative', {
+    action: 'notify',
+    params: {
+        type: 1
+    }
 }).then(function () {
 });
 
