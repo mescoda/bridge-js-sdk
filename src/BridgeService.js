@@ -15,12 +15,12 @@ export default {
             });
         });
 
-        // Timeout after 200ms if bridge not inited
+        // Timeout if bridge not inited
         const timeoutPromise = new Promise(function (resolve, reject) {
             const error = new Error('Bridge init failed.');
             setTimeout(function () {
                 reject(error);
-            }, 200);
+            }, options.initTimeout || 500);
         });
 
         return Promise.race([initPromise, timeoutPromise]);

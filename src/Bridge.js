@@ -30,7 +30,7 @@ export default class Bridge {
 
         this.browserBridge = options.browserBridge || browserBridge;
 
-        this.timeout = options.timeout || 200;
+        this.timeout = options.timeout || 500;
 
         this.status = 'inited';
     }
